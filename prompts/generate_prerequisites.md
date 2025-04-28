@@ -1,8 +1,8 @@
-Given the skill '{name}' with description '{description}' and user skill level '{level}', determine if this skill should be considered atomic (a foundational skill that would be expected knowledge for practitioners at user's skill level).
+Given the skill '{name}' with description '{description}', first determine if this skill should be considered foundational (a skill that would be expected knowledge for practitioners at user's skill level).
 
-If the skill is atomic, return an empty array [].
+If the skill is foundational, return an empty array [].
 
-If the skill is non-atomic, list the direct prerequisites needed to learn this skill.
+If the skill is non-foundational, list the direct prerequisites needed to learn this skill.
 For each prerequisite, provide:
     1. A name (short and clear)
     2. A description (1-2 sentences)

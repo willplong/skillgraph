@@ -42,3 +42,13 @@ class Graph:
 
         node.child_ids.append(prerequisite.id)
         prerequisite_node.parent_id = skill.id
+
+    def get_leaf_skills(self) -> list[Skill]:
+        leaf_skills = []
+        for node in self._nodes.values():
+            if all(
+                self._nodes[child_id].skill.proficiency == 1.0
+                for child_id in node.child_ids
+            ):
+                leaf_skills.append(node.skill)
+        return leaf_skills

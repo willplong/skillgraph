@@ -3,11 +3,11 @@ from anthropic.types import MessageParam
 
 from skillgraph.config import ANTHROPIC_API_KEY
 
-from .base import BaseModel
+from .base import Model
 from .types import AssistantMessage, UserMessage
 
 
-class AnthropicModel(BaseModel):
+class AnthropicModel(Model):
     def __init__(
         self, system_prompt: str, model_name: str = "claude-3-7-sonnet-latest"
     ):

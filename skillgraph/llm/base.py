@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from .types import ChatHistory
 
 
-class BaseModel(ABC):
+class Model(ABC):
     _MAX_TOKENS = 1024
 
     def __init__(self):
