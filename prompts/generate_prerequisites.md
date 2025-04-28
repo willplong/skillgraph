@@ -1,5 +1,8 @@
-Given the skill '{name}' with description '{description}', list the direct prerequisites needed to learn this skill.
+Given the skill '{name}' with description '{description}' and user skill level '{level}', determine if this skill should be considered atomic (a foundational skill that would be expected knowledge for practitioners at user's skill level).
 
+If the skill is atomic, return an empty array [].
+
+If the skill is non-atomic, list the direct prerequisites needed to learn this skill.
 For each prerequisite, provide:
     1. A name (short and clear)
     2. A description (1-2 sentences)
@@ -8,16 +11,9 @@ Format your response as a list of JSON objects:
 
 ```json
 [
-[
   {{
-    "name_1": "prerequisite 1 name",
-    "description_1": "prerequisite 1 description"
-  }},
-  ...
-  {{
-    "name_n": "prerequisite n name",
-    "description_n": "prerequisite n description"
+    "name": "prerequisite name",
+    "description": "prerequisite description"
   }}
-]
 ]
 ```

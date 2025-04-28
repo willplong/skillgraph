@@ -10,28 +10,39 @@ def load_prompt(name: str) -> str:
     return prompt_path.read_text()
 
 
-def generate_prerequisites(skill: Skill, llm: AnthropicModel) -> list[Skill]:
-    prompt = load_prompt("generate_prerequisites")
-    prompt = prompt.format(name=skill.name, description=skill.description)
-    response = llm.get_response(prompt)
-    try:
-        if response.startswith("```json"):
-            response = response[len("```json") :]
-        if response.endswith("```"):
-            response = response[: -len("```")]
-        prerequisites_data = json.loads(response)
-        prerequisites = [
-            Skill(name=prereq["name"], description=prereq["description"])
-            for prereq in prerequisites_data
-        ]
-        return prerequisites
-    except (json.JSONDecodeError, KeyError) as e:
-        raise ValueError(f"Failed to parse LLM response: {e}") from e
+def generate_prerequisites(
+    skill: Skill, llm: AnthropicModel, user_skill_level: str, max_retries: int = 3
+) -> list[Skill]:
+    prompt = load_prompt("generate_prerequisites").format(
+        name=skill.name, description=skill.description, level=user_skill_level
+    )
+
+    for attempt in range(max_retries):
+        try:
+            response = llm.get_response(prompt)
+            if response.startswith("```json"):
+                response = response[len("```json") :]
+            if response.endswith("```"):
+                response = response[: -len("```")]
+            prerequisites_data = json.loads(response)
+            prerequisites = [
+                Skill(name=prereq["name"], description=prereq["description"])
+                for prereq in prerequisites_data
+            ]
+            return prerequisites
+        except (json.JSONDecodeError, KeyError) as e:
+            if attempt == max_retries - 1:  # Last attempt
+                raise ValueError(
+                    f"Failed to parse LLM response after {max_retries} attempts: {e}"
+                ) from e
+            continue
+    raise RuntimeError("Unexpected error in generate_prerequisites")
 
 
 def main():
     system_prompt = load_prompt("system")
     llm = AnthropicModel(system_prompt=system_prompt)
+    user_skill_level = "PhD student in computational neuroscience"
 
     root_skill = Skill(
         name="Gaussian Processes",
@@ -40,12 +51,12 @@ def main():
 
     graph = Graph(root=root_skill)
 
-    prerequisites = generate_prerequisites(root_skill, llm)
+    prerequisites = generate_prerequisites(root_skill, llm, user_skill_level)
 
     for prerequisite in prerequisites:
         graph.add_prerequisite(root_skill, prerequisite)
 
-        sub_prerequisites = generate_prerequisites(prerequisite, llm)
+        sub_prerequisites = generate_prerequisites(prerequisite, llm, user_skill_level)
         for sub_prerequisite in sub_prerequisites:
             graph.add_prerequisite(prerequisite, sub_prerequisite)
 
