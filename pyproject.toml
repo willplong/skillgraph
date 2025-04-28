@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "skillgraph"
+version = "0.0.1"
+authors = [
+    { name = "Will Long", email = "willplong@icloud.com" }
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic",
+    "pydantic",
+    "python-dotenv",
+]
+
+[tool.ruff]
+fix = true
+
+[tool.ruff.format]
+skip-magic-trailing-comma = true
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "N", "SIM", "UP", "W"]
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+
+[tool.setuptools.packages.find]
+where = ["."]
