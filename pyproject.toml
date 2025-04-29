@@ -11,9 +11,11 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "anthropic",
-    "pydantic",
-    "python-dotenv",
+    "anthropic>=0.5.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.22.0",
 ]
 
 [tool.ruff]

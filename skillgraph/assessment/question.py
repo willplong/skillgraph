@@ -42,6 +42,7 @@ def generate_question(skills: list[Skill], llm) -> Question:
         skill_names=skill_names, skill_descriptions=skill_descriptions
     )
     question_data = parse_json_response(llm, prompt)
+    print(question_data)
 
     return Question(
         skills=skills,
